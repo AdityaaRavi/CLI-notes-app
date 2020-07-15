@@ -10,13 +10,9 @@ The proof of concept stage of this app will be split into multiple parts:
 + The second stage will deal getting the program to keep running 24x7 and listening for data requests from clients
 + The third and final stage will test the feasibility of using android studio to create an app that will handle the client side functions need for this app.
 
-**Proof of concept stage 1 - offline server tasks:**
-+ Creating a temporary GUI-less interface to test all the processing tasks that the server will have to take care of.
+**Proof of concept stage 1 - offline server tasks:** (Planned as of july 14, 2020 at 3 pm) 
++ Creating a temporary GUI-less interface to test all the processing tasks that the server will have to take care of. (Done as of July 14, 2020 @ 9:37 pm)
 + Indexing each note using a TBD method to help with finding a particular file.
 + Creating a searching class/function that takes in a search term and returns a dictionary, where each of the keys are the 
 names of the files and each value is a list with all the line numbers where the given search term is found. 
-(The method of returning data from the search feature may be updated later on) 
-
-
-**Time stamps**
-+ Jul 14, 2020 - 3:15 pm ==> Proof of concept structure decided, POC stage 1 details plan made and readme file updated to reflect the same.
+(The method of returning data from the search feature may be updated later on)
