@@ -15,7 +15,7 @@ The proof of concept stage of this app will be split into multiple parts:
 + Indexing each note using a TBD method to help with finding a particular file.
 + Creating a searching class/function that takes in a search term and returns a dictionary, where each of the keys are the 
 names of the files and each value is a list with all the line numbers where the given search term is found. 
-(The method of returning data from the search feature may be updated later on)
+(The method of returning data from the search feature may be updated later on) 
 
 
 **Time stamps**
