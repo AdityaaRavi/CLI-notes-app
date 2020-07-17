@@ -33,10 +33,10 @@ def execute_command(command):
     if(command.startswith("start_txt_editor")):
         # asking the user if they want create or edit a text file
         mode = input("Do you want to edit a text file or create a new one?\nAnswer"
-                     + " \"" + editor.EDIT_FILE_TOKEN + "\" or \"" + editor.NEW_FILE_TOKEN + "\"")
+                     + " \"" + editor.EDIT_FILE_TOKEN + "\" or \"" + editor.NEW_FILE_TOKEN + "\": ")
         file = None
 
-        if( not mode == editor.EDIT_FILE_TOKEN or not mode == editor.NEW_FILE_TOKEN):
+        if(not mode == editor.EDIT_FILE_TOKEN and not mode == editor.NEW_FILE_TOKEN):
             print("Invalid mode string, try again!")
             execute_command("start_txt_editor")
 
