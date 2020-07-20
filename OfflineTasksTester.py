@@ -3,11 +3,21 @@
 
 # importing all the features from the features directory
 from OflineFeatures import TxtNoteCreatingFunctions as editor
+from OflineFeatures import LabelingFunctions as labeler
+
+# Importing other required libraries
+from datetime import date
+
 # Actual program tester code
 print("Welcome to LAN-wide notes app's server side intermittent UI.\n")
 
 # A Dictionary that contains a list of all the commands that currently exist, and what they do.
 commands_dict = dict()
+
+# ### Creating a label object that indexes and keeps note of all the files currently in the app,
+# ### and moves files to appropriate folders based on their labels
+label = labeler.LabelInstance()
+
 # Add all the commands that this program can currently execute in the above dict
 commands_dict["label [location/file_name.txt] [new label]"] = "Change the label of file_name.txt to the given [new_label]"
 commands_dict["quit"] = "Quit this program"
@@ -23,11 +33,11 @@ def execute_command(command):
     # calling the label method.
     if(command.startswith("label")):
         parameters = command.split(" ")
-        if(parameters.len() != 3):
+        if(len(parameters) != 3):
             print("Please recheck your format.")
         else:
             # Call the label function here.
-            pass
+            label.changeLabel(parameters[1], parameters[2], date.today().strftime("%m.%d.%Y"))
 
     # starting the txt editor
     if(command.startswith("start_txt_editor")):

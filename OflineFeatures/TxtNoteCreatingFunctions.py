@@ -49,7 +49,13 @@ class EditorInstance:
     def editFile(self):
         try:
             self.file_name = input("What is the name of the file you want to open: ")
-            file_handler = open(self.file_name, "r")
+
+            # ################ Change the following commands to implement the searching algorithm once it is done.
+            self.label = input("What is the label of that file: ")
+            file_address = self.label + "/" + self.file_name
+            # ################ end future change planning
+
+            file_handler = open(file_address, "r")
             self.lines = file_handler.readlines()
             file_handler.close()
 
@@ -101,6 +107,7 @@ class EditorInstance:
                                  "Type \"y\" to confirm or any other key to cancel: ")
             if (confirmation.lower() == "y"):
                 self.saveFile()
+                # returning -- quit_auth and skip_while_loop_auth
                 return True, False
             else:
                 print("operation cancelled, continue typing")
@@ -114,12 +121,14 @@ class EditorInstance:
             if (line_number > len(lines) or line_number < 1):
                 print("invalid line number, reissue command to try again.")
                 print("----------------------------------------")
+                # returning -- quit_auth and skip_while_loop_auth
                 return False, True
 
             replacement = input("Type the replacement text: ")
             lines[line_number] = replacement
             print("done! Continue typing the next line.")
             print("----------------------------------------")
+            # returning -- quit_auth and skip_while_loop_auth
             return False, True
         # command to quit without saving
         if current_line == "**&&^":
@@ -128,13 +137,18 @@ class EditorInstance:
                                  "Type \"y\" to confirm or any other key to cancel: ")
             if (confirmation.lower() == "y"):
                 self.lines = list()
+                # returning -- quit_auth and skip_while_loop_auth
                 return True, False
             else:
                 print("operation cancelled, continue typing")
-            print("----------------------------------------")
+                print("----------------------------------------")
+                # returning -- quit_auth and skip_while_loop_auth
+                return False, True
 
         # Printing available commands when asked
-        if(current_line == "%%help"): self.printAvailableCommands()
+        if(current_line == "%%help"):
+            self.printAvailableCommands()
+            return False, True
 
         return False, False
 
