@@ -57,14 +57,14 @@ class EditorInstance:
             print("File opened, here is a preview of what there is so far:\n----------------------------------------")
             for line in self.lines:
                 print(str(self.lines.index(line)) + ": "+ line, end="")
-            print("----------------------------------------")
+            print("\n----------------------------------------")
 
             # Printing a list of all available commands
             self.printAvailableCommands()
             # Starting the editor runner.
             self.editorRunner()
 
-        except():
+        except(FileNotFoundError):
             create_new_file = input("No such file exists, Do you want to create a new one? (reply \"yes\" or \"no\"): ")
             if(create_new_file.lower().startswith("yes")):
                 self.newFile()
@@ -79,7 +79,7 @@ class EditorInstance:
 
     def editorRunner(self):
         while True:
-            current_line = input(str(len(self.lines) - 1) + ": ")
+            current_line = input(str(len(self.lines)) + ": ")
 
             # checking if any special commands are called and executing them as necessary
             # and also quiting or skipping to the next iteration of the while loop as necessary.
@@ -117,7 +117,7 @@ class EditorInstance:
                 return False, True
 
             replacement = input("Type the replacement text: ")
-            lines[line_number + 1] = replacement
+            lines[line_number] = replacement
             print("done! Continue typing the next line.")
             print("----------------------------------------")
             return False, True
@@ -150,17 +150,18 @@ class EditorInstance:
         print("----------------------------------------")
 
     def saveFile(self):
-        print("Here is a preview of your file:/n----------------------------------------")
+        print("Here is a preview of your file:\n----------------------------------------")
         for line in self.lines:
-            print(line)
+            print(line.strip())
         print("----------------------------------------")
 
         # save file tasks that have to be done when creating a new file.
         file_handler = open(self.file_name, "w")
         summative_string = ""
         for line in self.lines:
-            summative_string += line + "\n"
-            file_handler.write(summative_string)
+            summative_string += line.strip() + "\n"
+
+        file_handler.write(summative_string)
 
         file_handler.close()
         print("----------------------------------------")
