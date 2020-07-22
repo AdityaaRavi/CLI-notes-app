@@ -34,14 +34,16 @@ class LabelInstance:
         # moving the file to the appropriate directory.
         shutil.move(old_path, NOTES_DIRECTORY + "/" + label + "/" + file_name)
 
-
-
-
     # method to add the details of a new file to the index
     def changeLabel(self, file_name, label, date):
         path_parameters = file_name.split("/")
-        old_label = path_parameters[0]
-        file_name = path_parameters[1]
+        old_label = ""
+        file_name = ""
+        if(len(path_parameters) > 1):
+            old_label = path_parameters[0]
+            file_name = path_parameters[1]
+        else:
+            file_name = path_parameters[0]
         # find file in local database and remove old data
         del self.index[file_name, old_label]
         # change indexing data

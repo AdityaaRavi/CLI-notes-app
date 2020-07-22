@@ -3,9 +3,12 @@
 
 # Importing other required libraries
 from datetime import date
+from OflineFeatures import LabelIndexSearch as labelref
+import os
 
 NEW_FILE_TOKEN = "new"
 EDIT_FILE_TOKEN = "edit"
+NOTES_DIRECTORY = labelref.NOTES_DIRECTORY
 
 class EditorInstance:
     task = ""
@@ -56,7 +59,7 @@ class EditorInstance:
 
             # ################ Change the following commands to implement the searching algorithm once it is done.
             self.label = input("What is the label of that file: ")
-            file_address = self.label + "/" + self.file_name
+            file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
             # ################ end future change planning
 
             file_handler = open(file_address, "r")
@@ -183,7 +186,12 @@ class EditorInstance:
         file_handler.write(summative_string)
 
         file_handler.close()
-        self.labeler.newFileSaved(self.file_name, self.lines[1].strip().split(" ")[1], date.today().strftime("%m.%d.%Y"))
+        new_label = self.lines[1].strip().split(" ")[1]
+        if self.task == NEW_FILE_TOKEN:
+            self.labeler.newFileSaved(self.file_name, new_label, date.today().strftime("%m.%d.%Y"))
+        else:
+            self.labeler.changeLabel(NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name, new_label,
+                                     date.today().strftime("%m.%d.%Y"))
         print("----------------------------------------")
         print("Your file has been saved.")
         print("----------------------------------------")
