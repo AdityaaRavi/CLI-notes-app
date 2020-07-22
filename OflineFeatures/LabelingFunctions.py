@@ -1,6 +1,7 @@
 # Importing "os"-an inbuilt module that can be used to interact with the file system like creating and deleting folders
 import os
 import shutil
+NOTES_DIRECTORY = "UserNotes"
 
 class LabelInstance:
     current_dir = ""
@@ -17,21 +18,21 @@ class LabelInstance:
             line.strip()
             data = line.split()
             # key = name, label |||| and value = date_of_creation, path
-            self.index[data[0], data[1]] = (data[2], "UserData/" + data[1] + "/" + data[0])
+            self.index[data[0], data[1]] = (data[2], NOTES_DIRECTORY + "/" + data[1] + "/" + data[0])
         # print(index)
 
     # method to move files to match their labels (pass -1 for current path if the file in in the home folder).
     def moveFiles(self, file_name, label, old_label):
         old_path = file_name
         if(old_label is not -1):
-            old_path = "UserData/" + old_label + "/" + file_name
+            old_path = NOTES_DIRECTORY + "/" + old_label + "/" + file_name
 
-        if(not os.path.exists("UserData/" + label)):
+        if(not os.path.exists(NOTES_DIRECTORY + "/" + label)):
             # The current label is new and hence a new folder must be made
-            os.mkdir("UserData/" + label)
+            os.mkdir(NOTES_DIRECTORY + "/" + label)
 
         # moving the file to the appropriate directory.
-        shutil.move(old_path, "UserData/" + label + "/" + file_name)
+        shutil.move(old_path, NOTES_DIRECTORY + "/" + label + "/" + file_name)
 
 
 
@@ -42,26 +43,26 @@ class LabelInstance:
         old_label = path_parameters[0]
         file_name = path_parameters[1]
         # find file in local database and remove old data
-        self.index.pop(file_name, old_label)
+        del self.index[file_name, old_label]
         # change indexing data
-        self.index[file_name, label] = (date, "UserData/" + label + "/" + file_name)
-        # call method to update the disk copy of indexing data
-        self.updateDisk()
+        self.index[file_name, label] = (date, NOTES_DIRECTORY + "/" + label + "/" + file_name)
         # use "os" library to move the file.
         self.moveFiles(file_name, label, old_label)
+        # call method to update the disk copy of indexing data
+        self.updateDisk()
         # Letting the user know its done!
         print("Label changed!")
 
     # method to add the details of a new file to the index
     def newFileSaved(self, file_name, label, date):
-        self.index[file_name, label] = (date, "UserData/" + label + "/" + file_name)
+        self.index[file_name, label] = (date, NOTES_DIRECTORY + "/" + label + "/" + file_name)
         self.moveFiles(file_name, label, -1)
         self.updateDisk(file_name, label)
         print("Added to index!")
 
     # Method to remove the details of a deleted note from the index
     def fileRemoved(self, file_name, label):
-        self.index.pop(file_name, label)
+        del self.index[file_name, label]
         self.updateDisk()
 
     # #### Overloaded methods to help find each file from the index, each returns

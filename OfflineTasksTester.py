@@ -38,7 +38,12 @@ def execute_command(command):
             print("Please recheck your format.")
         else:
             # Call the label function here.
-            label.changeLabel(parameters[1], parameters[2], date.today().strftime("%m.%d.%Y"))
+            try:
+                label.changeLabel(parameters[1], parameters[2], date.today().strftime("%m.%d.%Y"))
+            except(FileNotFoundError):
+                print("No such file found, please double check the label and name of the file! ")
+                print("Call the command again with vaild parameters as defined in the help dialog and above line to"
+                      + " continue")
 
     # starting the txt editor
     if(command.startswith("start_txt_editor")):
