@@ -19,7 +19,7 @@ commands_dict = dict()
 label = labeler.LabelInstance()
 
 # Add all the commands that this program can currently execute in the above dict
-commands_dict["label [location/file_name.txt] [new label]"] = "Change the label of file_name.txt to the given [new_label]"
+commands_dict["label [old_label/file_name.txt] [new_label]"] = "Change the label of file_name.txt to the given [new_label]"
 commands_dict["quit"] = "Quit this program"
 commands_dict["start_txt_editor"] = "Start the inbuilt text editor which creates a text file with the given" + \
                                     " data, in the format needed for the other features of this app to work"
@@ -27,7 +27,8 @@ commands_dict["start_txt_editor"] = "Start the inbuilt text editor which creates
 # A function that reads the given user_command and calls the appropriate method to execute it.
 def execute_command(command):
     if(command.startswith("quit")):
-        print("Exiting the program...")
+        print("Saving all Changes and exiting the program...")
+        label.updateDisk()
         quit()
 
     # calling the label method.
