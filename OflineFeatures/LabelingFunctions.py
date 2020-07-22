@@ -17,20 +17,21 @@ class LabelInstance:
             line.strip()
             data = line.split()
             # key = name, label |||| and value = date_of_creation, path
-            self.index[data[0], data[1]] = (data[2], data[1] + "/" + data[0])
+            self.index[data[0], data[1]] = (data[2], "UserData/" + data[1] + "/" + data[0])
         # print(index)
 
     # method to move files to match their labels (pass -1 for current path if the file in in the home folder).
     def moveFiles(self, file_name, label, old_label):
         old_path = file_name
         if(old_label is not -1):
-            old_path = old_label + "/" + file_name
+            old_path = "UserData/" + old_label + "/" + file_name
 
-        if(not os.path.exists(label)):
+        if(not os.path.exists("UserData/" + label)):
             # The current label is new and hence a new folder must be made
-            os.mkdir(label)
+            os.mkdir("UserData/" + label)
+
         # moving the file to the appropriate directory.
-        shutil.move(old_path, label + "/" + file_name)
+        shutil.move(old_path, "UserData/" + label + "/" + file_name)
 
 
 
@@ -43,7 +44,7 @@ class LabelInstance:
         # find file in local database and remove old data
         self.index.pop(file_name, old_label)
         # change indexing data
-        self.index[file_name, label] = (date, label + "/" + file_name)
+        self.index[file_name, label] = (date, "UserData/" + label + "/" + file_name)
         # call method to update the disk copy of indexing data
         self.updateDisk()
         # use "os" library to move the file.
@@ -53,7 +54,7 @@ class LabelInstance:
 
     # method to add the details of a new file to the index
     def newFileSaved(self, file_name, label, date):
-        self.index[file_name, label] = (date, label + "/" + file_name)
+        self.index[file_name, label] = (date, "UserData/" + label + "/" + file_name)
         self.moveFiles(file_name, label, -1)
         self.updateDisk(file_name, label)
         print("Added to index!")
@@ -93,10 +94,11 @@ class LabelInstance:
         file_handler = open("AppData/index_storage.txt", "w")
         # Updating the on-disk index
         for file_name, label in self.index:
-            file_handler.write(file_name + " " + label + " " + self.index[file_name, label][0])
+            file_handler.write(file_name + " " + label + " " + self.index[file_name, label][0] + "\n")
 
         # closing the file_handler
         file_handler.close()
+        print(self.index)
 
 
 
