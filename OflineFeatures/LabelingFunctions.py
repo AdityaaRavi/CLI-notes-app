@@ -1,8 +1,6 @@
 # Importing "os"-an inbuilt module that can be used to interact with the file system like creating and deleting folders
 import os
-
-print("The code here was run..................................")
-
+import shutil
 
 class LabelInstance:
     current_dir = ""
@@ -23,8 +21,19 @@ class LabelInstance:
         # print(index)
 
     # method to move files to match their labels (pass -1 for current path if the file in in the home folder).
-    def moveFiles(self, file_name, label, current_path):
-        pass
+    def moveFiles(self, file_name, label, old_label):
+        old_path = file_name
+        if(old_label is not -1):
+            old_path = old_label + "/" + file_name
+
+        if(not os.path.exists(label)):
+            # The current label is new and hence a new folder must be made
+            os.mkdir(label)
+        # moving the file to the appropriate directory.
+        shutil.move(old_path, label + "/" + file_name)
+
+
+
 
     # method to add the details of a new file to the index
     def changeLabel(self, file_name, label, date):
