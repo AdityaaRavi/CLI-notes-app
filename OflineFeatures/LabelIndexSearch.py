@@ -57,7 +57,7 @@ class LabelInstance:
     def newFileSaved(self, file_name, label, date):
         self.index[file_name, label] = (date, NOTES_DIRECTORY + "/" + label + "/" + file_name)
         self.moveFiles(file_name, label, -1)
-        self.updateDisk(file_name, label)
+        self.updateDisk()
         print("Added to index!")
 
     # Method to remove the details of a deleted note from the index
@@ -99,7 +99,7 @@ class LabelInstance:
 
         # closing the file_handler
         file_handler.close()
-        print(self.index)
+        # print(self.index)
 
 
 

@@ -1,19 +1,23 @@
 # This file contains the all the code and features for the first text file creator/editor
 # This file contains the code needed to create a text file with the formatting currently needed for the labeling and index functions.
 
+# Importing other required libraries
+from datetime import date
+
 NEW_FILE_TOKEN = "new"
 EDIT_FILE_TOKEN = "edit"
-
 
 class EditorInstance:
     task = ""
     file_name = ""
     label = ""
     lines = None
+    labeler = None
 
-    def __init__(self, mode):
+    def __init__(self, mode, labeler):
         self.task = mode
         self.lines = list()
+        self.labeler = labeler
         # self.start()
 
     def start(self):
@@ -25,7 +29,7 @@ class EditorInstance:
 # ####### Method to create a new file and starting writing on it.
     def newFile(self):
         self.file_name = input("What do you want to be the name of your note? ")
-        sure = input("Are you sure you want to proceed? Any files with the same name will be OVERRIDDEN...\n" +
+        sure = input("Are you sure you want to proceed? Any files with the same name and label will be OVERRIDDEN...\n" +
                      "Press \"y\" to continue and anything else to quit: ")
         if(sure.lower() == "y"):
             self.label = input("What Label should this note go under? ")
@@ -111,8 +115,9 @@ class EditorInstance:
                 return True, False
             else:
                 print("operation cancelled, continue typing")
+                print("----------------------------------------")
                 return False, True
-            print("----------------------------------------")
+
         # command to edit a particular line of the file
         if current_line == "^^^^":
             print("----------------------------------------")
@@ -178,6 +183,7 @@ class EditorInstance:
         file_handler.write(summative_string)
 
         file_handler.close()
+        self.labeler.newFileSaved(self.file_name, self.lines[1].strip().split(" ")[1], date.today().strftime("%m.%d.%Y"))
         print("----------------------------------------")
         print("Your file has been saved.")
         print("----------------------------------------")

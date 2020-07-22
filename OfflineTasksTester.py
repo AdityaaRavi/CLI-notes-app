@@ -3,7 +3,7 @@
 
 # importing all the features from the features directory
 from OflineFeatures import TxtNoteCreatingFunctions as editor
-from OflineFeatures import LabelingFunctions as labeler
+from OflineFeatures import LabelIndexSearch as labeler
 
 # Importing other required libraries
 from datetime import date
@@ -57,7 +57,7 @@ def execute_command(command):
             execute_command("start_txt_editor")
 
         # initiatating and starting the text editor
-        file = editor.EditorInstance(mode)
+        file = editor.EditorInstance(mode, label)
         file.start()
 
 # An infinte loop that keeps taking in commands.
