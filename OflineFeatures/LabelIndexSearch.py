@@ -85,7 +85,7 @@ class LabelInstance:
         # print(self.index)
 
     # ------------------------------------------------------------------------------ Searching methods
-    # #### Overloaded methods to help find each file from the index, each returns
+    # #### Methods to help find each file from the index, each returns
     # #### all the valid results based on given parameters.
 
     # One stop shop method that can automatically call the appropriate search method and return their results based on
