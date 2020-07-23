@@ -67,25 +67,6 @@ class LabelInstance:
         del self.index[file_name, label]
         self.updateDisk()
 
-    # #### Overloaded methods to help find each file from the index, each returns
-    # #### all the valid results based on given parameters.
-
-    # name of the file is the only parameter
-    def searchFile(self, file_name):
-        pass
-
-    # All required parameters to find a file given
-    def searchFile(self, file_name, label):
-        pass
-
-    # Name of the file and its date of the most recent modification are the only parameters
-    def searchFile(self, file_name, date):
-        pass
-
-    # Date of creation is the only parameter
-    def searchFile(self, date):
-        pass
-
     # function that returns the date of most recent modification.
     def getDateOfModification(self, file_name, label):
         return self.index[file_name, label][0]
@@ -103,6 +84,44 @@ class LabelInstance:
         file_handler.close()
         # print(self.index)
 
+    # ------------------------------------------------------------------------------ Searching methods
+    # #### Overloaded methods to help find each file from the index, each returns
+    # #### all the valid results based on given parameters.
+
+    # name of the file is the only parameter
+    def searchFile(self, file_name):
+        matching_items = dict()
+        for name, label in self.index:
+            if (name == file_name):
+                matching_items[name, label] = self.index[name, label]
+        return matching_items
+
+    # All required parameters to find a file given
+    def searchFile(self, file_name, label):
+        return self.index[file_name, label]
+
+    # Name of the file and its date of the most recent modification are the only parameters
+    def searchFile(self, file_name, date):
+        matching_items = dict()
+        for name, label in self.index:
+            if (name == file_name and self.getDateOfModification(name, label) == date):
+                matching_items[name, label] = self.index[name, label]
+        return matching_items
+
+    # Date of creation is the only parameter
+    def searchFile(self, date):
+        matching_items = dict()
+        for name, label in self.index:
+            if (self.getDateOfModification(name, label) == date):
+                matching_items[name, label] = self.index[name, label]
+        return matching_items
+
+    # Returns a dict() of all items that are currently indexed.
+    def searchFile(self):
+        matching_results = dict()
+        for name, label in self.index:
+            matching_results[name, label] = self.index[name, label]
+        return matching_results
 
 
 
