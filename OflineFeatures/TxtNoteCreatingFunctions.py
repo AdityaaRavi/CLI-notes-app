@@ -126,8 +126,8 @@ class EditorInstance:
             print("----------------------------------------")
 
             line_number = int(input("Enter the line number of the line you wish to change: "))
-            if (line_number > len(lines) or line_number < 1):
-                print("invalid line number, reissue command to try again.")
+            if (line_number > len(lines) or line_number < 1): ################################# MIGHT HAVE TO CHANGE THIS
+                print("invalid line number, reissue command to try again.\nLines 0 and 1 are reserved by the program.")
                 print("----------------------------------------")
                 # returning -- quit_auth and skip_while_loop_auth
                 return False, True
@@ -178,20 +178,32 @@ class EditorInstance:
         print("----------------------------------------")
 
         # save file tasks that have to be done when creating a new file.
-        file_handler = open(self.file_name, "w")
+        file_handler = None
+
+        if self.task == NEW_FILE_TOKEN:
+            # creating a new text file in the base directory so that can be moved later by newFileSaved() method
+            file_handler = open(self.file_name, "w")
+        else:
+            # Replacing the old version of file edited here with the new one.
+            file_handler = open(NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name, "w")
+
+        # Combining each line of the text into one string
         summative_string = ""
         for line in self.lines:
             summative_string += line.strip() + "\n"
 
+        # Saving the file to the disk
         file_handler.write(summative_string)
 
         file_handler.close()
+
+        # Updating the label index and moving the file to its appropriate place if there is any change/newly created
         new_label = self.lines[1].strip().split(" ")[1]
         if self.task == NEW_FILE_TOKEN:
             self.labeler.newFileSaved(self.file_name, new_label, date.today().strftime("%m.%d.%Y"))
         else:
-            self.labeler.changeLabel(NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name, new_label,
-                                     date.today().strftime("%m.%d.%Y"))
+            self.labeler.changeLabel(self.label + "/" + self.file_name, new_label, date.today().strftime("%m.%d.%Y"))
+
         print("----------------------------------------")
         print("Your file has been saved.")
         print("----------------------------------------")
