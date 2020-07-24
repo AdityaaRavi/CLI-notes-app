@@ -25,7 +25,7 @@ class LabelInstance:
     def moveFiles(self, file_name, label, old_label):
         old_path = file_name
         if(old_label is not -1):
-            old_path = NOTES_DIRECTORY + "/" + old_label + "/" + file_name
+            old_path = NOTES_DIRECTORY + "/" + old_label + "/" + file_name  ###########################
 
         if(not os.path.exists(NOTES_DIRECTORY + "/" + label)):
             # The current label is new and hence a new folder must be made
@@ -35,17 +35,18 @@ class LabelInstance:
         shutil.move(old_path, NOTES_DIRECTORY + "/" + label + "/" + file_name)
 
     # method to add the details of a new file to the index
-    def changeLabel(self, file_name, label, date):
-        path_parameters = file_name.split("/")
+    # full_path, new_label, date
+    def changeLabel(self, full_path, label, date):
+        path_parameters = full_path.split("/")
         old_label = ""
         file_name = ""
         if(len(path_parameters) > 1):
-            old_label = path_parameters[0]
-            file_name = path_parameters[1]
+            old_label = str.join("/", path_parameters[:-1])
+            file_name = path_parameters[-1]
         else:
             file_name = path_parameters[0]
         # find file in local database and remove old data
-        del self.index[file_name, old_label]
+        del self.index[file_name, path_parameters[-2]]
         # change indexing data
         self.index[file_name, label] = (date, NOTES_DIRECTORY + "/" + label + "/" + file_name)
         # use "os" library to move the file.
@@ -164,10 +165,13 @@ class LabelInstance:
 # Takes the given dictionary in index format and prints it out in a useable way
 def printInIndexFormat(ref):
     print("-----------------------------------------------------")
-    print("These are the items that match your search parameters: \n")
-    print("\t%s\t%s\t%s\t%s\n" % ("Path", "Name of the file", "Label of the file", "Recent date of modification"))
-    for name, label in ref:
-        print("\t%s\t%s\t%s\t%s" % (ref[name, label][1], name, label, ref[name, label][0]))
+    if(len(ref) == 0):
+        print("NO results found! Please try again.")
+    else:
+        print("These are the items that match your search parameters: \n")
+        print("\t%s\t%s\t%s\t%s\n" % ("Path", "Name of the file", "Label of the file", "Recent date of modification"))
+        for name, label in ref:
+            print("\t%s\t%s\t%s\t%s" % (ref[name, label][1], name, label, ref[name, label][0]))
 
     print("-----------------------------------------------------")
 

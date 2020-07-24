@@ -1,0 +1,14 @@
+File Name: testing.txt
+Label: test_label_5
+Line 1
+Line 2
+Line 2 Edited
+Line 4 edited
+Line 5
+Line 5 edited
+Line 7
+This file was newly edited on 7.22.20 to check
+the
+labeling feature in the save file method
+This file was edited again at 1:03 pm on 7.23.20 to check the automatic calling of the labeling function done when edited.
+Edited again, same reason, same day, at 1:18 pm ==> changing the label via the editor's console.
