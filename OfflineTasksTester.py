@@ -23,8 +23,9 @@ commands_dict["label [old_label/file_name.txt] [new_label]"] = "Change the label
 commands_dict["quit"] = "Quit this program"
 commands_dict["start_txt_editor"] = "Start the inbuilt text editor which creates a text file with the given" + \
                                     " data, in the format needed for the other features of this app to work"
-commands_dict["Search"] = "Start searching for a note using its name, label and most recent date of modification" \
+commands_dict["search"] = "Start searching for a note using its name, label and most recent date of modification" \
                           + "Or any combination of both"
+commands_dict["open [path]"] = "Open the file at the given path if it exists"
 
 # A function that reads the given user_command and calls the appropriate method to execute it.
 def execute_command(command):
@@ -72,20 +73,13 @@ def execute_command(command):
         else:
             given_date = input("When was the last time you opened it using the inbuilt text editor?" +
                                " (Leave it blank if you don't know) MM.DD.YYYY: ")
-
-
-            if(not given_date == "" and not given_name == ""):
-                labeler.printInIndexFormat(label.searchFor(file_name=given_name, date=given_date))
-            elif(not given_name == ""):
-                labeler.printInIndexFormat(label.searchFor(file_name=given_name))
-            elif(not given_date == "" and not given_label == ""):
-                labeler.printInIndexFormat(label.searchFor(label=given_label, date=given_date))
-            elif(not given_date == ""):
-                labeler.printInIndexFormat(label.searchFor(date=given_date))
-            elif(not given_label == ""):
-                labeler.printInIndexFormat(label.searchFor(label=given_label))
-            else:
-                labeler.printInIndexFormat(label.searchFor())
+            # Creating a dict() and filling it with all user-given non empty parameters.
+            search_terms = dict()
+            if(not given_name == ""):search_terms["file_name"] = given_name
+            if(not given_label == ""): search_terms["label"] = given_label
+            if(not given_date == ""): search_terms["date"] = given_date
+            # Passing a dictionary with all given parameters to **kwarg
+            labeler.printInIndexFormat(label.searchFor(**search_terms))
 
 # An infinte loop that keeps taking in commands.
 while True:
