@@ -158,6 +158,17 @@ class LabelInstance:
             matching_results[name, label] = self.index[name, label]
         return matching_results
 
+# ########## other functions
 
+
+# Takes the given dictionary in index format and prints it out in a useable way
+def printInIndexFormat(ref):
+    print("-----------------------------------------------------")
+    print("These are the items that match your search parameters: \n")
+    print("\t%s\t%s\t%s\t%s\n" % ("Path", "Name of the file", "Label of the file", "Recent date of modification"))
+    for name, label in ref:
+        print("\t%s\t%s\t%s\t%s" % (ref[name, label][1], name, label, ref[name, label][0]))
+
+    print("-----------------------------------------------------")
 
 
