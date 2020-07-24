@@ -16,18 +16,28 @@ class EditorInstance:
     label = ""
     lines = None
     labeler = None
+    path_code = ""
 
     def __init__(self, mode, labeler):
         self.task = mode
+        self.path_code = -1
         self.lines = list()
         self.labeler = labeler
         # self.start()
+
+# Constructor to be used by the open method to skip having to ask the user the name and label of the file
+    def __init__(self, labeler, path, auto):
+        self.task = EDIT_FILE_TOKEN
+        self.lines = list()
+        self.labeler = labeler
+        self.path_code = path
+        self.editFile(path)
 
     def start(self):
         if(self.task == NEW_FILE_TOKEN):
             self.newFile()
         elif(self.task == EDIT_FILE_TOKEN):
-            self.editFile()
+            self.editFile(-1)
 
 # ####### Method to create a new file and starting writing on it.
     def newFile(self):
@@ -51,16 +61,16 @@ class EditorInstance:
             # listening to all commands and running the editor
             self.editorRunner()
 
-
-# ####### Method to initiate the editing an existing file
-    def editFile(self):
+# ####### Method to initiate the editing an existing file, pass "-1" to the "file_address" parameter if the user used
+# ## start_txt_editor command to start the text editor.
+    def editFile(self, file_address):
         try:
-            self.file_name = input("What is the name of the file you want to open: ")
-
-            # ################ Change the following commands to implement the searching algorithm once it is done.
-            self.label = input("What is the label of that file: ")
-            file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
-            # ################ end future change planning
+            if(file_address == -1):
+                self.file_name = input("What is the name of the file you want to open: ")
+                # ################ Change the following commands to implement the searching algorithm once it is done.
+                self.label = input("What is the label of that file: ")
+                file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
+                # ################ end future change planning
 
             file_handler = open(file_address, "r")
             self.lines = file_handler.readlines()
@@ -84,7 +94,7 @@ class EditorInstance:
             else:
                 quit_auth = input("Do you want to retry typing the name of the file correctly or quit the text editor?"
                                   + "(reply \"retry\" or \"quit\"): ").lower()
-                if quit_auth.startswith("retry"): self.editFile()
+                if quit_auth.startswith("retry"): self.editFile(-1)
 
 
 # ######################################################## Commands common for both editing an existing file
@@ -183,9 +193,12 @@ class EditorInstance:
         if self.task == NEW_FILE_TOKEN:
             # creating a new text file in the base directory so that can be moved later by newFileSaved() method
             file_handler = open(self.file_name, "w")
-        else:
+        elif self.path_code == -1:
             # Replacing the old version of file edited here with the new one.
             file_handler = open(NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name, "w")
+        else:
+            # Replacing the old version of file edited here with the new one.
+            file_handler = open(self.path_code, "w")
 
         # Combining each line of the text into one string
         summative_string = ""

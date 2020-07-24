@@ -63,6 +63,15 @@ def execute_command(command):
         file = editor.EditorInstance(mode, label)
         file.start()
 
+    # Opening the text editor on a file at the path given by the user
+    if (command.startswith("open")):
+        parameters = command.split(" ")
+        if (len(parameters) != 2):
+            print("Please recheck your format.")
+        else:
+            given_path = parameters[1]
+            editor.EditorInstance(label, given_path, 1)
+
     # Starting the search function
     if(command.startswith("search")):
         given_name = input("Name of the file (leave it blank if you don't know): ")
