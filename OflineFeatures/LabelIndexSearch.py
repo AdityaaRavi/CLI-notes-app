@@ -22,10 +22,12 @@ class LabelInstance:
         # print(index)
 
     # method to move files to match their labels (pass -1 for current path if the file in in the home folder).
-    def moveFiles(self, file_name, label, old_label):
+    def moveFiles(self, file_name, label, old_label, auto):
         old_path = file_name
-        if(old_label is not -1):
+        if(old_label is not -1 and auto is not -1):
             old_path = NOTES_DIRECTORY + "/" + old_label + "/" + file_name  ###########################
+        elif(old_label is not -1):
+            old_path = old_label + "/" + file_name
 
         if(not os.path.exists(NOTES_DIRECTORY + "/" + label)):
             # The current label is new and hence a new folder must be made
@@ -36,7 +38,7 @@ class LabelInstance:
 
     # method to add the details of a new file to the index
     # full_path, new_label, date
-    def changeLabel(self, full_path, label, date):
+    def changeLabel(self, full_path, label, date, auto):
         path_parameters = full_path.split("/")
         old_label = ""
         file_name = ""
@@ -44,17 +46,17 @@ class LabelInstance:
             old_label = str.join("/", path_parameters[:-1])
             file_name = path_parameters[-1]
         else:
-            file_name = path_parameters[0]
+            file_name = path_parameters[-1]
         # find file in local database and remove old data
         del self.index[file_name, path_parameters[-2]]
         # change indexing data
         self.index[file_name, label] = (date, NOTES_DIRECTORY + "/" + label + "/" + file_name)
         # use "os" library to move the file.
-        self.moveFiles(file_name, label, old_label)
+        self.moveFiles(file_name, label, old_label, auto)
         # call method to update the disk copy of indexing data
         self.updateDisk()
         # Letting the user know its done!
-        print("Label changed!")
+        print("Label updated!")
 
     # method to add the details of a new file to the index
     def newFileSaved(self, file_name, label, date):
