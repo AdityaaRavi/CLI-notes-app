@@ -27,8 +27,10 @@ commands_dict["search"] = "Start searching for a note using its name, label and 
                           + "Or any combination of both"
 commands_dict["open [path]"] = "Open the file at the given path if it exists"
 
+
 # A function that reads the given user_command and calls the appropriate method to execute it.
-def execute_command(command):
+# parameters: potential_command_keyword, a function that does what ever that has to be done with results from the search
+def execute_command(command, search_action):
     # Quiting the program if requested by the user
     if(command.startswith("quit")):
         print("Saving all Changes and exiting the program...")
@@ -57,7 +59,7 @@ def execute_command(command):
 
         if(not mode == editor.EDIT_FILE_TOKEN and not mode == editor.NEW_FILE_TOKEN):
             print("Invalid mode string, try again!")
-            execute_command("start_txt_editor")
+            execute_command("start_txt_editor", labeler.printInIndexFormat)
 
         # initiatating and starting the text editor
         file = editor.EditorInstance(mode, label)
@@ -88,11 +90,11 @@ def execute_command(command):
             if(not given_label == ""): search_terms["label"] = given_label
             if(not given_date == ""): search_terms["date"] = given_date
             # Passing a dictionary with all given parameters to **kwarg
-            labeler.printInIndexFormat(label.searchFor(**search_terms))
+            search_action(label.searchFor(**search_terms))
 
 # An infinte loop that keeps taking in commands.
 while True:
     print("\nThese are the available commands:\n", commands_dict)
     user_command = input("\nEnter the command to excute (following the same format as given above): ")
-    execute_command(user_command)
+    execute_command(user_command, labeler.printInIndexFormat)
 

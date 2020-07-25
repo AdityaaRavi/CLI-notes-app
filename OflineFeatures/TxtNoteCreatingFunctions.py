@@ -4,6 +4,7 @@
 # Importing other required libraries
 from datetime import date
 from OflineFeatures import LabelIndexSearch as labelref
+import OfflineTasksTester as UI
 import os
 
 NEW_FILE_TOKEN = "new"
@@ -67,10 +68,15 @@ class EditorInstance:
     def editFile(self, file_address):
         try:
             if(file_address == -1):
-                self.file_name = input("What is the name of the file you want to open: ")
+                self.file_name = input("What is the name of the file you want to open" +
+                                       " (Leave it blank if you don't know): ")
                 # ################ Change the following commands to implement the searching algorithm once it is done.
-                self.label = input("What is the label of that file: ")
-                file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
+                self.label = input("What is the label of that file (Leave it blank if you don't know):")
+                if (not self.file_name == "" and not self.label == ""):
+                    file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
+                else:
+                    file_address = UI.execute_command("search", getPathFromMatchingItems)
+
                 # ################ end future change planning
 
             file_handler = open(file_address, "r")
@@ -224,5 +230,23 @@ class EditorInstance:
         print("Your file has been saved.")
         print("----------------------------------------")
 
+
+# A method definition to dictate what the search feature does once it finds all possible results
+def getPathFromMatchingItems(matching_items):
+    answer = list()
+    for name, label in matching_items:
+        answer.append((name, label, matching_items[name, label][1]))
+
+    print("These are all the files that match your search terms. ")
+    print("Sno. \t Name \t Label \t Path")
+    print("-----------------------------------------------------")
+
+    iteration = 0
+    for tuple in answer:
+        print(iteration, "\t", tuple[0], tuple[1], tuple[2])
+        iteration += 1
+
+    sno = int(input("Enter the Sno. of the file you want to open: "))
+    return answer[sno][2]
 
 
