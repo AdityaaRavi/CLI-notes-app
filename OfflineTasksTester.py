@@ -45,7 +45,8 @@ def execute_command(command, search_action):
         else:
             # Call the label function here.
             try:
-                label.changeLabel(parameters[1], parameters[2], date.today().strftime("%m.%d.%Y"))
+                label.changeLabel(parameters[1], parameters[2], date.today().strftime("%m.%d.%Y"),
+                                  editor.AUTO_EDIT_TOKEN)
             except(FileNotFoundError):
                 print("No such file found, please double check the label and name of the file! ")
                 print("Call the command again with vaild parameters as defined in the help dialog and above line to"
@@ -62,7 +63,8 @@ def execute_command(command, search_action):
             execute_command("start_txt_editor", labeler.printInIndexFormat)
 
         # initiatating and starting the text editor
-        file = editor.EditorInstance(mode, label)
+        # self, labeler, mode, path
+        file = editor.EditorInstance(label, mode, -1, execute_command)
         file.start()
 
     # Opening the text editor on a file at the path given by the user
@@ -72,7 +74,10 @@ def execute_command(command, search_action):
             print("Please recheck your format.")
         else:
             given_path = parameters[1]
-            editor.EditorInstance(label, given_path, 1)
+            # Parameters - self, labeler, mode, path
+            #print("-------#$%^^&& Editor instance called.")
+            editor.EditorInstance(label, editor.AUTO_EDIT_TOKEN, given_path, execute_command).start()
+
 
     # Starting the search function
     if(command.startswith("search")):

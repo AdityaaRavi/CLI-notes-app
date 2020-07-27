@@ -4,11 +4,13 @@
 # Importing other required libraries
 from datetime import date
 from OflineFeatures import LabelIndexSearch as labelref
-import OfflineTasksTester as UI
+
 import os
 
 NEW_FILE_TOKEN = "new"
 EDIT_FILE_TOKEN = "edit"
+MANUAL_EDIT_TOKEN = "manual"
+AUTO_EDIT_TOKEN = "auto"
 NOTES_DIRECTORY = labelref.NOTES_DIRECTORY
 
 class EditorInstance:
@@ -18,22 +20,20 @@ class EditorInstance:
     lines = None
     labeler = None
     path_code = ""
+    command_runner = None
 
-    def __init__(self, mode, labeler):
-        self.task = mode
-        self.path_code = -1
+    def __init__(self, labeler, mode, path, command_runner):
+        if(mode == AUTO_EDIT_TOKEN):
+            self.task = EDIT_FILE_TOKEN
+            self.path_code = path
+            self.label = str.join("/", path.split("/")[:-1])
+        else:
+            self.task = mode
+            self.path_code = -1
+
         self.lines = list()
         self.labeler = labeler
-        # self.start()
-
-# Constructor to be used by the open method to skip having to ask the user the name and label of the file
-    def __init__(self, labeler, path, auto):
-        self.task = EDIT_FILE_TOKEN
-        self.lines = list()
-        self.labeler = labeler
-        self.path_code = path
-        self.label = str.join("/", path.split("/")[:-1])
-        self.editFile(path)
+        self.command_runner = command_runner
 
     def start(self):
         if(self.task == NEW_FILE_TOKEN):
@@ -75,7 +75,7 @@ class EditorInstance:
                 if (not self.file_name == "" and not self.label == ""):
                     file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
                 else:
-                    file_address = UI.execute_command("search", getPathFromMatchingItems)
+                    file_address = self.command_runner("search", getPathFromMatchingItems) #############################
 
                 # ################ end future change planning
 
