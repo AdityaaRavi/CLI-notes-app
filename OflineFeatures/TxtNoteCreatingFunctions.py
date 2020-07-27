@@ -9,7 +9,7 @@ import os
 
 NEW_FILE_TOKEN = "new"
 EDIT_FILE_TOKEN = "edit"
-MANUAL_EDIT_TOKEN = "manual"
+# MANUAL_EDIT_TOKEN = "manual"
 AUTO_EDIT_TOKEN = "auto"
 NOTES_DIRECTORY = labelref.NOTES_DIRECTORY
 
@@ -27,7 +27,9 @@ class EditorInstance:
             self.task = EDIT_FILE_TOKEN
             self.path_code = path
             self.label = str.join("/", path.split("/")[:-1])
+            print("---- Editor instance created in auto mode, with the label:", self.label)
         else:
+            print("---- Editor instance created in manual mode")
             self.task = mode
             self.path_code = -1
 
@@ -39,7 +41,7 @@ class EditorInstance:
         if(self.task == NEW_FILE_TOKEN):
             self.newFile()
         elif(self.task == EDIT_FILE_TOKEN):
-            self.editFile(-1)
+            self.editFile(self.path_code)
 
 # ####### Method to create a new file and starting writing on it.
     def newFile(self):
@@ -66,7 +68,7 @@ class EditorInstance:
 # ####### Method to initiate the editing an existing file, pass "-1" to the "file_address" parameter if the user used
 # ## start_txt_editor command to start the text editor.
     def editFile(self, file_address):
-        try:
+        #try:
             if(file_address == -1):
                 self.file_name = input("What is the name of the file you want to open" +
                                        " (Leave it blank if you don't know): ")
@@ -75,33 +77,34 @@ class EditorInstance:
                 if (not self.file_name == "" and not self.label == ""):
                     file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
                 else:
-                    file_address = self.command_runner("search", getPathFromMatchingItems) #############################
+                    print("Ok, Starting the search feature to help you find the file....")
+                    file_address = self.command_runner("search", getPathFromMatchingItems) # ##########################
+                    self.path_code = file_address
 
-                # ################ end future change planning
+            if (not file_address == -1): # adding edge case support in the case that 0 files match the user search terms
+                file_handler = open(file_address, "r")
+                self.lines = file_handler.readlines()
+                file_handler.close()
 
-            file_handler = open(file_address, "r")
-            self.lines = file_handler.readlines()
-            file_handler.close()
+                # This part of the code runs if there is in fact a file with the name the user gave
+                print("File opened, here is a preview of what there is so far:\n----------------------------------------")
+                for line in self.lines:
+                    print(str(self.lines.index(line)) + ": "+ line, end="")
+                print("\n----------------------------------------")
 
-            # This part of the code runs if there is in fact a file with the name the user gave
-            print("File opened, here is a preview of what there is so far:\n----------------------------------------")
-            for line in self.lines:
-                print(str(self.lines.index(line)) + ": "+ line, end="")
-            print("\n----------------------------------------")
+                # Printing a list of all available commands
+                self.printAvailableCommands()
+                # Starting the editor runner.
+                self.editorRunner()
 
-            # Printing a list of all available commands
-            self.printAvailableCommands()
-            # Starting the editor runner.
-            self.editorRunner()
-
-        except(FileNotFoundError):
-            create_new_file = input("No such file exists, Do you want to create a new one? (reply \"yes\" or \"no\"): ")
-            if(create_new_file.lower().startswith("yes")):
-                self.newFile()
-            else:
-                quit_auth = input("Do you want to retry typing the name of the file correctly or quit the text editor?"
-                                  + "(reply \"retry\" or \"quit\"): ").lower()
-                if quit_auth.startswith("retry"): self.editFile(-1)
+        # except(FileNotFoundError):
+        #     create_new_file = input("No such file exists, Do you want to create a new one? (reply \"yes\" or \"no\"): ")
+        #     if(create_new_file.lower().startswith("yes")):
+        #         self.newFile()
+        #     else:
+        #         quit_auth = input("Do you want to retry typing the name of the file correctly or quit the text editor?"
+        #                           + "(reply \"retry\" or \"quit\"): ").lower()
+        #         if quit_auth.startswith("retry"): self.editFile(self.path_code)
 
 
 # ######################################################## Commands common for both editing an existing file
@@ -194,9 +197,10 @@ class EditorInstance:
             print(line.strip())
         print("----------------------------------------")
 
-        # save file tasks that have to be done when creating a new file.
         file_handler = None
 
+        # save file tasks that have to be done when creating a new file.
+        # file_handler = None
         if self.task == NEW_FILE_TOKEN:
             # creating a new text file in the base directory so that can be moved later by newFileSaved() method
             file_handler = open(self.file_name, "w")
@@ -220,9 +224,9 @@ class EditorInstance:
         # Updating the label index and moving the file to its appropriate place if there is any change/newly created
         new_label = self.lines[1].strip().split(" ")[1]
         if self.task == NEW_FILE_TOKEN:
-            self.labeler.newFileSaved(self.file_name, new_label, date.today().strftime("%m.%d.%Y"))
+            self.labeler.newFileSaved(self.file_name, new_label, date.today().strftime("%m.%d.%Y"), "not auto")
         elif self.path_code == -1:
-            self.labeler.changeLabel(self.label + "/" + self.file_name, new_label, date.today().strftime("%m.%d.%Y"))
+            self.labeler.changeLabel(self.label + "/" + self.file_name, new_label, date.today().strftime("%m.%d.%Y"), "not auto")
         else:
             self.labeler.changeLabel(self.path_code, new_label, date.today().strftime("%m.%d.%Y"), -1)
 
@@ -236,6 +240,10 @@ def getPathFromMatchingItems(matching_items):
     answer = list()
     for name, label in matching_items:
         answer.append((name, label, matching_items[name, label][1]))
+
+    if(len(answer) < 1):
+        print("No results matched your search criteria, please try again.")
+        return -1
 
     print("These are all the files that match your search terms. ")
     print("Sno. \t Name \t Label \t Path")

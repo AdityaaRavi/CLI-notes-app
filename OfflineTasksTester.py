@@ -95,7 +95,9 @@ def execute_command(command, search_action):
             if(not given_label == ""): search_terms["label"] = given_label
             if(not given_date == ""): search_terms["date"] = given_date
             # Passing a dictionary with all given parameters to **kwarg
-            search_action(label.searchFor(**search_terms))
+            return search_action(label.searchFor(**search_terms))
+
+    return "random string to fool the compiler"
 
 # An infinte loop that keeps taking in commands.
 while True:

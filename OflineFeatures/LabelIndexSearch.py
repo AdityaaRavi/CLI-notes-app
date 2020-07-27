@@ -22,6 +22,7 @@ class LabelInstance:
         # print(index)
 
     # method to move files to match their labels (pass -1 for current path if the file in in the home folder).
+    # pass -1 to the "auto" parameter to denote that the file in question was openned automatically.
     def moveFiles(self, file_name, label, old_label, auto):
         old_path = file_name
         if(old_label is not -1 and auto is not -1):
@@ -61,7 +62,7 @@ class LabelInstance:
     # method to add the details of a new file to the index
     def newFileSaved(self, file_name, label, date):
         self.index[file_name, label] = (date, NOTES_DIRECTORY + "/" + label + "/" + file_name)
-        self.moveFiles(file_name, label, -1)
+        self.moveFiles(file_name, label, -1, 0)
         self.updateDisk()
         print("Added to index!")
 

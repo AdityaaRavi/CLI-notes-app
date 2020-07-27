@@ -12,3 +12,4 @@ the
 labeling feature in the save file method
 This file was edited again at 1:03 pm on 7.23.20 to check the automatic calling of the labeling function done when edited.
 Edited again, same reason, same day, at 1:18 pm ==> changing the label via the editor's console.
+Edited for the same reason on 7/26/2020 at 21:44
