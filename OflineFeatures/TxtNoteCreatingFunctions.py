@@ -68,7 +68,7 @@ class EditorInstance:
 # ####### Method to initiate the editing an existing file, pass "-1" to the "file_address" parameter if the user used
 # ## start_txt_editor command to start the text editor.
     def editFile(self, file_address):
-        #try:
+        try:
             if(file_address == -1):
                 self.file_name = input("What is the name of the file you want to open" +
                                        " (Leave it blank if you don't know): ")
@@ -97,14 +97,14 @@ class EditorInstance:
                 # Starting the editor runner.
                 self.editorRunner()
 
-        # except(FileNotFoundError):
-        #     create_new_file = input("No such file exists, Do you want to create a new one? (reply \"yes\" or \"no\"): ")
-        #     if(create_new_file.lower().startswith("yes")):
-        #         self.newFile()
-        #     else:
-        #         quit_auth = input("Do you want to retry typing the name of the file correctly or quit the text editor?"
-        #                           + "(reply \"retry\" or \"quit\"): ").lower()
-        #         if quit_auth.startswith("retry"): self.editFile(self.path_code)
+        except(FileNotFoundError):
+            create_new_file = input("No such file exists, Do you want to create a new one? (reply \"yes\" or \"no\"): ")
+            if(create_new_file.lower().startswith("yes")):
+                self.newFile()
+            else:
+                quit_auth = input("Do you want to retry typing the name of the file correctly or quit the text editor?"
+                                  + "(reply \"retry\" or \"quit\"): ").lower()
+                if quit_auth.startswith("retry"): self.editFile(self.path_code)
 
 
 # ######################################################## Commands common for both editing an existing file
@@ -224,7 +224,7 @@ class EditorInstance:
         # Updating the label index and moving the file to its appropriate place if there is any change/newly created
         new_label = self.lines[1].strip().split(" ")[1]
         if self.task == NEW_FILE_TOKEN:
-            self.labeler.newFileSaved(self.file_name, new_label, date.today().strftime("%m.%d.%Y"), "not auto")
+            self.labeler.newFileSaved(self.file_name, new_label, date.today().strftime("%m.%d.%Y"))
         elif self.path_code == -1:
             self.labeler.changeLabel(self.label + "/" + self.file_name, new_label, date.today().strftime("%m.%d.%Y"), "not auto")
         else:
