@@ -4,6 +4,7 @@
 # importing all the features from the features directory
 from OflineFeatures import TxtNoteCreatingFunctions as editor
 from OflineFeatures import LabelIndexSearch as labeler
+from OflineFeatures import reset_data
 
 # Importing other required libraries
 from datetime import date
@@ -26,7 +27,11 @@ commands_dict["start_txt_editor"] = "Start the inbuilt text editor which creates
 commands_dict["search"] = "Start searching for a note using its name, label and most recent date of modification" \
                           + "Or any combination of both"
 commands_dict["open [path]"] = "Open the file at the given path if it exists"
-
+commands_dict["reset [command]"] = "Use this command to purge some/all user data\nCommands:\nmove -- archive all data " \
+                                   "and reset index" \
+                                   "\nall -- use to remove EVERTHING, no backup left\nindex -- use to clear just the " \
+                                   "index, preventing the search and labeling function in this program from finding the" \
+                                   "data, but leaving it untouched regradless.\nhelp -- print this info."
 
 # A function that reads the given user_command and calls the appropriate method to execute it.
 # parameters: potential_command_keyword, a function that does what ever that has to be done with results from the search
@@ -96,6 +101,35 @@ def execute_command(command, search_action):
             if(not given_date == ""): search_terms["date"] = given_date
             # Passing a dictionary with all given parameters to **kwarg
             return search_action(label.searchFor(**search_terms))
+
+    if(command.startswith("reset")):
+        if len(command) == 2:
+            toDo = command.split()[1].strip().lower()
+            if(toDo == "all"):
+                conf = input("\nAre you sure that you want to irrecoverably delete all your files? (Type \"y\" to confirm"
+                             ", anything else to cancel.)")
+                if conf.lower() is "y":
+                    reset_data.resetProgram(label, all=True)
+            if(toDo == "move"):
+                conf = input("\nAre you sure that you want to archive all your files? You won't be able to access/edit"
+                             " those files with this program anymore.(Type \"y\" to confirm"
+                             ", anything else to cancel.)")
+                if conf.lower() is "y":
+                    reset_data.resetProgram(label, move=True)
+            if(toDo == "index"):
+                conf = input("\nAre you sure that you want to irrecoverably delete the index? "
+                             "You won't be able to access/edit"
+                             "ANY currently existing files with this program anymore.(Type \"y\" to confirm"
+                             ", anything else to cancel.)")
+                if conf.lower() is "y":
+                    reset_data.resetProgram(label, index=True)
+            else:
+                print("\nPrinting Help for this function.\n----------\n")
+                print(commands_dict["reset [command]"])
+                print("These are the only commands available\n--------")
+        else:
+            print("\nwrong amount of parameters. see the following help text for more info.\n")
+            print(commands_dict["reset [command]"])
 
     return "random string to fool the compiler"
 

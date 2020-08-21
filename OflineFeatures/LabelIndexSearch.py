@@ -1,6 +1,10 @@
 # Importing "os"-an inbuilt module that can be used to interact with the file system like creating and deleting folders
 import os
 import shutil
+""" need to create a setup code that changes this as per the user's NAS name and storage folder
+    and test if the connection is strong and works. Must have a variable to store if the setup has
+    already been completed for a first time, and/or if there is a problem with network connectivity
+"""
 NOTES_DIRECTORY = "UserNotes"
 
 class LabelInstance:
@@ -67,9 +71,15 @@ class LabelInstance:
         print("Added to index!")
 
     # Method to remove the details of a deleted note from the index
-    def fileRemoved(self, file_name, label):
+    def removeFile(self, file_name, label, delete_files):
+        if delete_files:
+            os.remove(NOTES_DIRECTORY + "/" + label + "/" + file_name)
         del self.index[file_name, label]
         self.updateDisk()
+
+    # returns a copy of the indez array
+    def getIndexCopy(self):
+        return dict(self.index)
 
     # function that returns the date of most recent modification.
     def getDateOfModification(self, file_name, label):
