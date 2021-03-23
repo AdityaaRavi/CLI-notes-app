@@ -1,4 +1,2 @@
 testing789.txt test_label_5 07.23.2020
 testing.txt test_label_5 07.26.2020
-testing.txt test_label_7 09.22.2020
-
