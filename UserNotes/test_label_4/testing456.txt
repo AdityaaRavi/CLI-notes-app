@@ -1,5 +1,0 @@
-File Name: testing456.txt
-Label: test_label_4
-2: The purpose of this file is to test the labeling functions' newFileCreated
-3: method.
-4: time: 1:14 pm on 7.22.2020
