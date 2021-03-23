@@ -88,39 +88,43 @@ def execute_command(command, search_action):
     if(command.startswith("search")):
         given_name = input("Name of the file (leave it blank if you don't know): ")
         given_label = input("What is the label of the file you are looking for (Leave it blank if you don't know): ")
-        # ##### check if i can just pass a dictionary.
-        if(not given_name == "" and not given_label == ""):
-            print("Date modified, path respectively: ", label.searchFor(file_name=given_name, label=given_label))
-        else:
-            given_date = input("When was the last time you opened it using the inbuilt text editor?" +
-                               " (Leave it blank if you don't know) MM.DD.YYYY: ")
-            # Creating a dict() and filling it with all user-given non empty parameters.
-            search_terms = dict()
-            if(not given_name == ""):search_terms["file_name"] = given_name
-            if(not given_label == ""): search_terms["label"] = given_label
-            if(not given_date == ""): search_terms["date"] = given_date
-            # Passing a dictionary with all given parameters to **kwarg
-            return search_action(label.searchFor(**search_terms))
+        # ##### check if i can just pass a dictionary -- I can and I did...
+        # if(not given_name == "" and not given_label == ""):
+        #     print("Date modified, path respectively: ", label.searchFor(file_name=given_name, label=given_label))
+        # else:
+        given_date = input("When was the last time you opened it using the inbuilt text editor?" +
+                           " (Leave it blank if you don't know) MM.DD.YYYY: ")
+        # Creating a dict() and filling it with all user-given non empty parameters.
+        search_terms = dict()
+        if(not given_name == ""):search_terms["file_name"] = given_name
+        if(not given_label == ""): search_terms["label"] = given_label
+        if(not given_date == ""): search_terms["date"] = given_date
+
+        path_to_file = search_action(label.searchFor(**search_terms))
+        if not len(command.split()) == 2:
+            execute_command(f"open {path_to_file}", editor.getPathFromMatchingItems)
+
+        return path_to_file
 
     if(command.startswith("reset")):
-        if len(command) == 2:
+        if len(command.split()) == 2:
             toDo = command.split()[1].strip().lower()
             if(toDo == "all"):
                 conf = input("\nAre you sure that you want to irrecoverably delete all your files? (Type \"y\" to confirm"
-                             ", anything else to cancel.)")
+                             ", anything else to cancel.): ")
                 if conf.lower() is "y":
                     reset_data.resetProgram(label, all=True)
-            if(toDo == "move"):
+            elif(toDo == "move"):
                 conf = input("\nAre you sure that you want to archive all your files? You won't be able to access/edit"
                              " those files with this program anymore.(Type \"y\" to confirm"
-                             ", anything else to cancel.)")
+                             ", anything else to cancel.): ")
                 if conf.lower() is "y":
                     reset_data.resetProgram(label, move=True)
-            if(toDo == "index"):
+            elif(toDo == "index"):
                 conf = input("\nAre you sure that you want to irrecoverably delete the index? "
                              "You won't be able to access/edit"
                              "ANY currently existing files with this program anymore.(Type \"y\" to confirm"
-                             ", anything else to cancel.)")
+                             ", anything else to cancel.): ")
                 if conf.lower() is "y":
                     reset_data.resetProgram(label, index=True)
             else:
@@ -133,9 +137,21 @@ def execute_command(command, search_action):
 
     return "random string to fool the compiler"
 
+# method to print all the currently available commands in a readable way.
+def print_commands():
+    print("\nThese are the available commands: ")
+    print("-----------------------------------------------------")
+    print("Command:\tDescription:")
+    print("-----------------------------------------------------")
+    for command in commands_dict:
+        print(f"{command} ||\t{commands_dict[command]}")
+        print("--------------------------")
+    print("-----------------------------------------------------")
+
+
 # An infinte loop that keeps taking in commands.
 while True:
-    print("\nThese are the available commands:\n", commands_dict)
+    print_commands()
     user_command = input("\nEnter the command to excute (following the same format as given above): ")
-    execute_command(user_command, labeler.printInIndexFormat)
+    execute_command(user_command, editor.getPathFromMatchingItems)
 

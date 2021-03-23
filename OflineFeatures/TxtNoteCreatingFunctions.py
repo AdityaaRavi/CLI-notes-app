@@ -72,13 +72,12 @@ class EditorInstance:
             if(file_address == -1):
                 self.file_name = input("What is the name of the file you want to open" +
                                        " (Leave it blank if you don't know): ")
-                # ################ Change the following commands to implement the searching algorithm once it is done.
                 self.label = input("What is the label of that file (Leave it blank if you don't know):")
                 if (not self.file_name == "" and not self.label == ""):
                     file_address = NOTES_DIRECTORY + "/" + self.label + "/" + self.file_name
                 else:
                     print("Ok, Starting the search feature to help you find the file....")
-                    file_address = self.command_runner("search", getPathFromMatchingItems) # ##########################
+                    file_address = self.command_runner("search auto", getPathFromMatchingItems) # ##########################
                     self.path_code = file_address
 
             if (not file_address == -1): # adding edge case support in the case that 0 files match the user search terms
