@@ -9,7 +9,7 @@ Navigate to the folder where you want to store your copy of this program and the
 
 1. To download the program, run this line regardless of your Operating System.
 ```shell
-git clone git@github.com:AdityaaRavi/CLI-notes-app.git
+git clone https://github.com/AdityaaRavi/CLI-notes-app.git
 ```
 2. Then, go into the directory where the file `CLI.py` is stored:
 ```shell
