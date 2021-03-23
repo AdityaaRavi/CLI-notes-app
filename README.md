@@ -11,9 +11,9 @@ Navigate to the folder where you want to store your copy of this program and the
 ```shell
 git clone git@github.com:AdityaaRavi/CLI-notes-app.git
 ```
-2. Then, go into the directory where the main file `CLI.py` is:
+2. Then, go into the directory where the file `CLI.py` is stored:
 ```shell
-	cd CLI-notes-app
+cd CLI-notes-app
 ```
 3. Then to run the program,  
 	- For UNIX based systems (i.e MacOS and Linux)
