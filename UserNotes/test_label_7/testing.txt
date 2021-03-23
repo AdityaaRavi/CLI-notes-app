@@ -1,8 +1,0 @@
-File Name: testing.txt
-Label: test_label_7
-This file was created to test the new file save method at 1:02 pm on 28 july 2020 after a problem with it was found w while testing it in a different computer.
-Ok, it has been a long time since I last opened this program... It is Sept 22, 2020 today: nearly
-3 months after I started coding this program, and about 2 months and 2 weeks after I made the last significant change
-College is starting very soon, so I wanted to get this program to a stage where it is useful for me in my
-every day life. So lets see how much I accomplish in the 3 days I have left before college starts...
-SEE YA!
