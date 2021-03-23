@@ -34,6 +34,12 @@ cd CLI-notes-app
 - `reset` - (*Danger zone*) Remove or archive the file index (Needed by this program for its searching and labeling functions) and/or the user's notes.    
 - `quit` or `exit` - Quit the program. 
 
+## File Structure
+- `AppData` - Directory to store all the information needed by the program to run properly, as of now, this folder only contains the persitent copy of the index.
+- `UserNotes` - Directory that contains all files created and indexed by the user using this program. Each of the sub-directories hold all the notes classified under the respective label.
+- `CLI.py` - The main script with the Command Line Interface needed to use this program.
+- `OflineFeatures` - Contains all the code for each of the features of this program classified into multiple files.
+
 ## Screenshots
 ### Home screen
 ![image](https://user-images.githubusercontent.com/43429374/112095250-681ccc00-8b59-11eb-8e9c-c64e4ed83229.png)
