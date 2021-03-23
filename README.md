@@ -1,8 +1,11 @@
-## CLI Notes App
+# CLI Notes App
 
 A Command Line Interface based Notes app with support for Labeling, indexing, and searching.
 
-### Usage instructions
+## Why did I make this?
+I wanted an effortless way to make notes in an organized fashion without having to leave the terminal, so I decided to make a program to help me with that! 
+
+## Usage instructions
 Open your command line and type:
 
 Navigate to the folder where you want to store your copy of this program and the notes you make with it, then:
