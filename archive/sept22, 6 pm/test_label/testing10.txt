@@ -1,6 +1,0 @@
-File Name: testing10.txt
-Label: test_label
-This file was created at 21:22 on June 26, 2020 to help fix bugs in the save function in the case of new files.
-This file was edited at 21:45 on the same day to check the editor's functions and its save feature when all the details of the file were given manually, without using the search function.
-Edited at 21:53 the same day for the same reason.
-Search  feature used successfully to open a file for the first time on 21:59 the same day as before. YES!!!

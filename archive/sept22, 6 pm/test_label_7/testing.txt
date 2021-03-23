@@ -1,3 +1,0 @@
-File Name: testing.txt
-Label: test_label_7
-This file was created to test the new file save method at 1:02 pm on 28 july 2020 after a problem with it was found w while testing it in a different computer.
